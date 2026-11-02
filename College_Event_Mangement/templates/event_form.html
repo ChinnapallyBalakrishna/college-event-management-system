@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="form-shell wide">
+  <a class="back-link" href="{{ url_for('admin_dashboard') }}">← Back to dashboard</a>
+  <p class="eyebrow">EVENT DETAILS</p>
+  <h1>{{ page_title }}</h1>
+  {% set values = event if event else {} %}
+  <form method="post" class="panel form">
+    <label for="title">Event name</label>
+    <input id="title" name="title" required maxlength="120" value="{{ values.title or '' }}" placeholder="e.g. Annual TechFest">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" required maxlength="1000" rows="4" placeholder="What is this event about?">{{ values.description or '' }}</textarea>
+    <label for="category">Category</label>
+    <select id="category" name="category" required>
+      {% for cat in ['Technical', 'Cultural', 'Sports', 'Workshop', 'Seminar', 'Other'] %}
+      <option value="{{ cat }}" {% if values.category == cat %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+    <label for="event_date">Date and time</label>
+    <input id="event_date" name="event_date" type="datetime-local" required value="{{ values.event_date or '' }}">
+    <label for="location">Location</label>
+    <input id="location" name="location" required maxlength="200" value="{{ values.location or '' }}" placeholder="e.g. Main Auditorium">
+    <label for="capacity">Maximum number of students</label>
+    <input id="capacity" name="capacity" type="number" min="1" required value="{{ values.capacity or 50 }}">
+    <button class="button" type="submit">Save event →</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Register for {{ event.title }}{% endblock %}
+{% block content %}
+<div class="form-shell">
+  <a class="back-link" href="{{ url_for('student_dashboard') }}">← Back to student dashboard</a>
+  <p class="eyebrow">SAVE YOUR SPOT</p>
+  <h1>Register for an event</h1>
+  <div class="summary-card">
+    <span class="category">{{ event.category }}</span>
+    <h2>{{ event.title }}</h2>
+    <p class="muted">{{ event.description }}</p>
+    <p>📅 {{ event.event_date.replace('T', ' · ') }}</p>
+    <p>📍 {{ event.location }}</p>
+    <p>👥 {{ event.capacity - event.registered_count }} seats left</p>
+    <p>Student: <strong>{{ student.full_name }}</strong> ({{ student.email }})</p>
+  </div>
+  {% if already_registered %}
+    <div class="alert warning">You are already registered for this event.</div>
+    <a class="button" href="{{ url_for('student_dashboard') }}">Go to dashboard →</a>
+  {% elif event.registered_count >= event.capacity %}
+    <div class="alert danger">Sorry, this event is full.</div>
+  {% else %}
+    <form method="post" class="panel form">
+      <p>Confirm your registration using your student account details.</p>
+      <button class="button" type="submit">Confirm registration →</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,157 @@
+
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="hero dashboard-hero student-hero">
+    <p class="eyebrow">STUDENT DASHBOARD</p>
+    <h1>Welcome, {{ student.full_name }}!</h1>
+    <p class="hero-copy">
+        Find campus events and keep track of the events you have joined.
+    </p>
+</section>
+
+<!-- Dashboard statistics -->
+<div class="dashboard-stats stats-grid">
+
+    <div class="stat-card image-stat-card">
+        <div class="stat-image student-image"></div>
+        <div class="stat-info">
+            <h3>My registered events</h3>
+            <p>{{ registrations|length }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card image-stat-card">
+        <div class="stat-image event-image"></div>
+        <div class="stat-info">
+            <h3>Available events</h3>
+            <p>{{ events|length }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card image-stat-card">
+        <div class="stat-image department-image"></div>
+        <div class="stat-info">
+            <h3>My department</h3>
+            <p class="stat-text">{{ student.department }}</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Registered events -->
+<div class="section-heading student-section-heading">
+    <div>
+        <p class="eyebrow">YOUR BOOKINGS</p>
+        <h2>My registered events</h2>
+    </div>
+</div>
+
+{% if registrations %}
+<div class="table-panel panel table-scroll">
+    <table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date &amp; time</th>
+                <th>Venue</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for item in registrations %}
+            <tr>
+                <td>
+                    <strong>{{ item.title }}</strong>
+                    <small>{{ item.category }}</small>
+                </td>
+                <td>{{ item.event_date.replace('T', ' · ') }}</td>
+                <td>{{ item.location }}</td>
+                <td>
+                    <form method="post"
+                          action="{{ url_for('cancel_student_registration', registration_id=item.registration_id) }}"
+                          onsubmit="return confirm('Cancel this registration?')">
+                        <button class="delete-link" type="submit">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h3>No registrations yet</h3>
+    <p>Choose an event below and register to reserve your place.</p>
+</div>
+{% endif %}
+
+<!-- Available events -->
+<div class="section-heading student-section-heading">
+    <div>
+        <p class="eyebrow">EXPLORE CAMPUS</p>
+        <h2>Available events</h2>
+    </div>
+    <span class="count-pill">{{ events|length }} events</span>
+</div>
+
+{% if events %}
+<div class="event-grid">
+
+    {% for event in events %}
+    <article class="event-card">
+
+        <!-- Event photo -->
+        <div class="student-event-photo
+            {% if event.category == 'Technical' %}technical-photo
+            {% elif event.category == 'Cultural' %}cultural-photo
+            {% elif event.category == 'Sports' %}sports-photo
+            {% else %}other-photo{% endif %}">
+
+            <span class="category">{{ event.category }}</span>
+        </div>
+
+        <div class="event-body">
+
+            <p class="event-date">
+                {{ event.event_date.replace('T', ' · ') }}
+            </p>
+
+            <h3>{{ event.title }}</h3>
+
+            <p class="muted">{{ event.description }}</p>
+
+            <p class="location">📍 {{ event.location }}</p>
+
+            <div class="capacity">
+                <span>{{ event.registered_count }} registered</span>
+                <span>{{ event.capacity }} seats</span>
+            </div>
+
+            {% if event.registered_count >= event.capacity %}
+                <button class="button disabled" disabled>
+                    Event full
+                </button>
+            {% else %}
+                <a class="button"
+                   href="{{ url_for('register', event_id=event.id) }}">
+                    View / register →
+                </a>
+            {% endif %}
+
+        </div>
+    </article>
+    {% endfor %}
+
+</div>
+{% else %}
+<div class="empty-state">
+    <h3>No events yet</h3>
+    <p>Please check again later.</p>
+</div>
+{% endif %}
+
+{% endblock %}

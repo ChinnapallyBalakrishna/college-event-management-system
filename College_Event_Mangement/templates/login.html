@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+{% block content %}
+<div class="login-shell">
+  <div class="login-icon">🔐</div>
+  <p class="eyebrow">STAFF ACCESS</p>
+  <h1>Admin login</h1>
+  <p class="muted">Sign in to manage college events.</p>
+  <form method="post" class="panel form">
+    <label for="username">Username</label>
+    <input id="username" name="username" required autocomplete="username" placeholder="Admin username">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required autocomplete="current-password" placeholder="Password">
+    <button class="button" type="submit">Log in →</button>
+  </form>
+  <p class="hint">Demo login: <strong>admin</strong> / <strong>admin123</strong></p>
+</div>
+{% endblock %}

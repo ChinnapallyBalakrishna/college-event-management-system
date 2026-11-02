@@ -1,0 +1,84 @@
+
+{% extends "hr_base.html" %}
+
+{% block title %}Students | Campus HR{% endblock %}
+{% block heading %}Students{% endblock %}
+
+{% block content %}
+
+<div class="students-page">
+    <div class="page-heading">
+        <h2>Student Management</h2>
+        <p>View and manage all registered students.</p>
+    </div>
+
+    <!-- Total Students Image Card -->
+    <div class="student-summary-grid">
+        <div class="student-summary-card">
+            <img src="{{ url_for('static', filename='students.jpg') }}"
+                 alt="Students">
+            <div class="student-summary-info">
+                <h3>Total Students</h3>
+                <h2>{{ total_students }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student List -->
+    <div class="student-list-card">
+        <div class="student-list-heading">
+            <h2>Student List</h2>
+            <span>{{ total_students }} Students</span>
+        </div>
+
+        {% if students %}
+        <div class="student-table-wrapper">
+            <table class="student-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Registered On</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><strong>{{ student.full_name }}</strong></td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.department }}</td>
+                        <td>{{ student.created_at }}</td>
+                        <td class="student-actions">
+                            <a class="student-edit-btn"
+                               href="{{ url_for('hr_edit_student', student_id=student.id) }}">
+                                Edit
+                            </a>
+
+                            <form method="POST"
+                                  action="{{ url_for('hr_delete_student', student_id=student.id) }}"
+                                  onsubmit="return confirm('Delete this student?');">
+                                <button class="student-delete-btn" type="submit">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="empty-students">No students registered yet.</p>
+        {% endif %}
+    </div>
+
+    <a class="back-dashboard-link"
+       href="{{ url_for('hr_dashboard') }}">← Back to Dashboard</a>
+</div>
+
+{% endblock %}

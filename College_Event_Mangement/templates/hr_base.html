@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HR Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+{% if session.get('hr_id') %}
+<div class="hr-layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">C</div>
+            <div>
+                <h2>Campus HR</h2>
+                <span>Management Portal</span>
+            </div>
+        </div>
+
+        <p class="menu-label">MAIN MENU</p>
+        <a href="{{ url_for('hr_dashboard') }}" class="nav-link">▦ Dashboard</a>
+        <a href="{{ url_for('hr_departments') }}" class="nav-link">▤ Departments</a>
+        <a href="{{ url_for('hr_add_coordinator') }}" class="nav-link">＋ Add Coordinator</a>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+            <a href="{{ url_for('hr_logout') }}" class="nav-link logout">↪ Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <h3>{% block heading %}HR Dashboard{% endblock %}</h3>
+                <p>College Event Management System</p>
+            </div>
+            <div class="profile">
+                <div class="avatar">HR</div>
+                <div>
+                    <strong>HR Administrator</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</div>
+{% else %}
+    {% block login_content %}{% endblock %}
+{% endif %}
+
+</body>
+</html>

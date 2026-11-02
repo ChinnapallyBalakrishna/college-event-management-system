@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Student Signup{% endblock %}
+{% block content %}
+<div class="login-shell">
+  <div class="login-icon">🎓</div>
+  <p class="eyebrow">JOIN YOUR CAMPUS</p>
+  <h1>Create student account</h1>
+  <p class="muted">Sign up to register for college events and track your bookings.</p>
+  <form method="post" class="panel form">
+    <label for="full_name">Full name</label>
+    <input id="full_name" name="full_name" required maxlength="100" autocomplete="name" placeholder="Enter your full name">
+    <label for="email">Email address</label>
+    <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com">
+    <label for="department">Department</label>
+    <input id="department" name="department" required maxlength="100" placeholder="e.g. Computer Science">
+    <label for="password">Password (at least 8 characters)</label>
+    <input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" placeholder="Create a password">
+    <button class="button" type="submit">Create account →</button>
+  </form>
+  <p class="hint">Already have an account? <a class="text-link" href="{{ url_for('student_login') }}">Student login</a></p>
+</div>
+{% endblock %}

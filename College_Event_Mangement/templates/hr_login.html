@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HR Login</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#eee5ff,#fff0dc);font-family:Arial,sans-serif;color:#302044}
+.card{width:min(420px,92vw);background:white;padding:30px;border-radius:18px;box-shadow:0 12px 35px #51287920}h1{color:#512879;margin-top:0}label{font-weight:bold}input{width:100%;padding:12px;border:1px solid #d9cbe8;border-radius:8px;margin:7px 0 17px;font-size:16px}button{width:100%;padding:12px;background:#7041a6;color:white;border:0;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}.flash{background:#ffe8e8;padding:10px;border-radius:8px;margin-bottom:12px}
+</style></head><body><div class="card"><h1>HR Login</h1><p>Sign in to manage departments and coordinators.</p>
+{% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}
+<form method="post"><label>Username</label><input name="username" required autocomplete="username"><label>Password</label><input type="password" name="password" required autocomplete="current-password"><button type="submit">Login</button></form>
+<p><a href="{{ url_for('index') }}">Back to student homepage</a></p></div></body></html>

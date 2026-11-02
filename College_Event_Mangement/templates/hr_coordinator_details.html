@@ -1,0 +1,141 @@
+{% extends "hr_base.html" %}
+
+{% block title %}Coordinator Details | Campus HR{% endblock %}
+{% block heading %}Coordinator Details{% endblock %}
+
+{% block content %}
+
+{% set department_images = {
+    'cse': 'cse.jpg',
+    'ece': 'ece.jpg',
+    'eee': 'eee.jpg',
+    'mechanical': 'mechanical.jpg',
+    'civil': 'civil.jpg',
+    'it': 'it.jpg'
+} %}
+
+{% set dept_key = coordinator.department|lower|trim %}
+{% set photo = department_images.get(dept_key, 'department.jpg') %}
+<!-- Department, Student and Registration Image Cards -->
+<div class="department-stats-grid">
+
+    <!-- Department -->
+    <div class="department-image-card">
+        <img src="{{ url_for('static', filename=photo) }}"
+             alt="{{ coordinator.department }} Department">
+        <div class="department-image-info">
+            <h3>Department</h3>
+            <h2>{{ coordinator.department }}</h2>
+        </div>
+    </div>
+
+    <!-- Registered Students -->
+    <div class="department-image-card">
+        <img src="{{ url_for('static', filename='students.jpg') }}"
+             alt="Registered Students">
+        <div class="department-image-info">
+            <h3>Registered Students</h3>
+            <h2>{{ total_students }}</h2>
+        </div>
+    </div>
+
+    <!-- Event Registrations -->
+    <div class="department-image-card">
+        <img src="{{ url_for('static', filename='events.jpg') }}"
+             alt="Event Registrations">
+        <div class="department-image-info">
+            <h3>Event Registrations</h3>
+            <h2>{{ total_registrations }}</h2>
+        </div>
+    </div>
+
+</div>
+<!-- Coordinator Information -->
+<div class="panel">
+    <div class="panel-header">
+        <h3>Coordinator Information</h3>
+    </div>
+
+    <p><strong>Name:</strong> {{ coordinator.coordinator_name }}</p>
+    <p><strong>Department:</strong> {{ coordinator.department }}</p>
+    <p><strong>Email:</strong> {{ coordinator.email }}</p>
+    <p><strong>Phone:</strong> {{ coordinator.phone }}</p>
+</div>
+
+<!-- Student Registrations -->
+<div class="panel">
+    <div class="panel-header">
+        <h3>Event-wise Student Registrations</h3>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Student Name</th>
+                    <th>Student Email</th>
+                    <th>Department</th>
+                    <th>Registration Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for registration in registrations %}
+                <tr>
+                    <td><strong>{{ registration.title }}</strong></td>
+                    <td>{{ registration.student_name }}</td>
+                    <td>{{ registration.student_email }}</td>
+                    <td>{{ registration.student_department }}</td>
+                    <td>{{ registration.registered_at }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        No event registrations found for this department.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Event Registration Totals -->
+<div class="panel">
+    <div class="panel-header">
+        <h3>Event-wise Registration Totals</h3>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Total Registrations</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for event in event_totals %}
+                <tr>
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.total }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" class="empty-state">
+                        No event registrations available.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<a href="{{ url_for('hr_departments') }}" class="btn btn-light">
+    ← Back to Departments
+</a>
+
+{% endblock %}

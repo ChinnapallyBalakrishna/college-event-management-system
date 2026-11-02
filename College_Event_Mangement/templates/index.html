@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}College Events{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">YOUR CAMPUS, YOUR MOMENT</p>
+  <h1>Discover what’s happening<br>on campus.</h1>
+  <p class="hero-copy">Find workshops, tech events, cultural shows, and more. Register in a few clicks.</p>
+</section>
+
+<div class="section-heading">
+  <div><p class="eyebrow">THE CAMPUS CALENDAR</p><h2>Upcoming events</h2></div>
+  <span class="count-pill">{{ events|length }} events</span>
+</div>
+{% if events %}
+<div class="event-grid">
+  {% for event in events %}
+  <article class="event-card">
+    <div class="event-banner
+    {% if event.category == 'Technical' %}banner-technical
+    {% elif event.category == 'Cultural' %}banner-cultural
+    {% elif event.category == 'Sports' %}banner-sports
+    {% elif event.category == 'Workshop' %}banner-workshop
+    {% else %}banner-other
+    {% endif %}">
+      <span class="category">{{ event.category }}</span>
+      <span class="banner-icon">{% if event.category == 'Technical' %}💻{% elif event.category == 'Cultural' %}🎭{% elif event.category == 'Sports' %}🏆{% else %}✨{% endif %}</span>
+    </div>
+    <div class="event-body">
+      <p class="event-date">{{ event.event_date.replace('T', ' · ') }}</p>
+      <h3>{{ event.title }}</h3>
+      <p class="muted">{{ event.description }}</p>
+      <p class="location">📍 {{ event.location }}</p>
+      <div class="capacity"><span>{{ event.registered_count }} registered</span><span>{{ event.capacity }} seats</span></div>
+      <div class="progress"><span style="width: {{ [100, (event.registered_count * 100 // event.capacity)]|max if event.registered_count >= event.capacity else (event.registered_count * 100 // event.capacity) }}%"></span></div>
+      {% if event.registered_count >= event.capacity %}
+        <button class="button disabled" disabled>Event full</button>
+      {% else %}
+        <a class="button" href="{{ url_for('register', event_id=event.id) }}">Register now <span>→</span></a>
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><h3>No events yet</h3><p>Please check again later.</p></div>
+{% endif %}
+{% endblock %}

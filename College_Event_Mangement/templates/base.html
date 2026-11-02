@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Campus Events{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="nav-wrap">
+    <a class="brand" href="{{ url_for('index') }}">🎓 SriIndu CampusEvents</a>
+        <nav>
+      <a href="{{ url_for('index') }}">Events</a>
+      {% if session.get('student_id') %}
+        <a href="{{ url_for('student_dashboard') }}">Student dashboard</a>
+        <a href="{{ url_for('student_logout') }}">Student logout</a>
+      {% else %}
+        <a href="{{ url_for('student_login') }}">Student login</a>
+        <a href="{{ url_for('student_signup') }}">Student signup</a>
+      {% endif %}
+      {% if session.get('admin_id') %}
+        <a href="{{ url_for('admin_dashboard') }}">Admin dashboard</a>
+        <a href="{{ url_for('admin_logout') }}">Admin logout</a>
+      {% else %}
+        <a href="{{ url_for('admin_login') }}">Admin login</a>
+      {% endif %}
+      <a href="{{ url_for('hr_login') }}">HR login</a>
+    </nav>
+  </div>
+</header>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>© {{ current_year }} CampusEvents · College Event Management System</footer>
+</body>
+</html>

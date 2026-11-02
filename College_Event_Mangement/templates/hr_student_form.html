@@ -1,0 +1,40 @@
+{% extends "hr_base.html" %}
+
+{% block title %}Edit Student | Campus HR{% endblock %}
+{% block heading %}Edit Student{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <h2>Edit Student Details</h2>
+
+    <form method="POST">
+
+        <label>Student Name</label>
+        <input type="text"
+               name="full_name"
+               value="{{ student.full_name }}"
+               required>
+
+        <label>Email</label>
+        <input type="email"
+               name="email"
+               value="{{ student.email }}"
+               required>
+
+        <label>Department</label>
+        <input type="text"
+               name="department"
+               value="{{ student.department }}"
+               required>
+
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+        </button>
+
+        <a href="{{ url_for('hr_students') }}">Cancel</a>
+
+    </form>
+</div>
+
+{% endblock %}

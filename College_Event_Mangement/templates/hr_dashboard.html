@@ -1,0 +1,158 @@
+
+{% extends "hr_base.html" %}
+
+{% block title %}HR Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>HR Dashboard</h1>
+        <p>Manage departments, coordinators and campus participation.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-image department-image"></div>
+        <div class="stat-info">
+            <h3>Total Departments</h3>
+            <p>{{ total_departments }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-image coordinator-image"></div>
+        <div class="stat-info">
+            <h3>Total Coordinators</h3>
+            <p>{{ total_coordinators }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-image student-image"></div>
+        <div class="stat-info">
+            <h3>Total Students</h3>
+            <p>{{ total_students }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-image event-image"></div>
+        <div class="stat-info">
+            <h3>Total Events</h3>
+            <p>{{ total_events }}</p>
+        </div>
+    </div>
+</div>
+<div class="panel quick-actions-panel">
+    <div class="panel-header">
+        <h3>Quick Actions</h3>
+    </div>
+
+    <div class="quick-actions-grid">
+
+        <a href="{{ url_for('hr_add_coordinator') }}"
+           class="quick-action-card">
+            <img src="{{ url_for('static', filename='coordinators.jpg') }}"
+                 alt="Add Coordinator">
+            <div class="quick-action-info">
+                <h3>+ Add Department Coordinator</h3>
+                <p>Register a new department coordinator.</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('hr_departments') }}"
+           class="quick-action-card">
+            <img src="{{ url_for('static', filename='department.jpg') }}"
+                 alt="Departments">
+            <div class="quick-action-info">
+                <h3>View All Departments</h3>
+                <p>Manage departments and coordinators.</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('hr_students') }}"
+           class="quick-action-card">
+            <img src="{{ url_for('static', filename='students.jpg') }}"
+                 alt="Students">
+            <div class="quick-action-info">
+                <h3>View All Students</h3>
+                <p>View and manage registered students.</p>
+            </div>
+        </a>
+
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3>Department Overview</h3>
+        <span>{{ total_departments }} Departments</span>
+    </div>
+
+    {% if departments %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Coordinator</th>
+                    <th>Students</th>
+                    <th>Registrations</th>
+                    <th>Events</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+                            
+                
+                <tbody>
+                    {% for department in departments %}
+                    <tr>
+                        <td><strong>{{ department.department }}</strong></td>
+
+                        <td>
+                            {% if department.coordinator_name %}
+                                {{ department.coordinator_name }}
+                            {% else %}
+                                Not Assigned
+                            {% endif %}
+                        </td>
+
+                        <td>{{ department.student_count }}</td>
+                        <td>{{ department.registration_count }}</td>
+                        <td>{{ department.event_count }}</td>
+
+                        <td>
+                            {% if department.coordinator_id %}
+                                <a href="/hr/coordinators/{{ department.coordinator_id }}/edit"
+                                class="btn">
+                                    Edit
+                                </a>
+
+                                <form method="POST"
+                                    action="/hr/coordinators/{{ department.coordinator_id }}/delete"
+                                    style="display: inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this coordinator?');">
+                                    <button type="submit" class="btn">
+                                        Delete
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span>Not Assigned</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+
+        </table>
+    </div>
+    {% else %}
+        <p>No departments found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

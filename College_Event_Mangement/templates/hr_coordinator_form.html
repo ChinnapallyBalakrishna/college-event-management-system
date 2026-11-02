@@ -1,0 +1,90 @@
+
+{% extends "hr_base.html" %}
+
+{% block title %}
+{% if coordinator %}Edit Coordinator{% else %}Add Department Coordinator{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>
+            {% if coordinator %}
+                Edit Department Coordinator
+            {% else %}
+                Add Department Coordinator
+            {% endif %}
+        </h1>
+        <p>Enter the coordinator's details and assign a department.</p>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3>Coordinator Information</h3>
+    </div>
+
+    <form method="POST"
+          action="{% if coordinator %}
+                    {{ url_for('hr_edit_coordinator', coordinator_id=coordinator.id) }}
+                  {% else %}
+                    {{ url_for('hr_add_coordinator') }}
+                  {% endif %}">
+
+        <div class="form-group">
+            <label for="full_name">Coordinator Name</label>
+            <input
+                type="text"
+                id="full_name"
+                name="full_name"
+                value="{{ coordinator.full_name if coordinator else '' }}"
+                placeholder="Enter coordinator name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="department">Department</label>
+            <input
+                type="text"
+                id="department"
+                name="department"
+                value="{{ coordinator.department if coordinator else '' }}"
+                placeholder="Enter department"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                value="{{ coordinator.email if coordinator else '' }}"
+                placeholder="Enter email address"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value="{{ coordinator.phone if coordinator else '' }}"
+                placeholder="Enter phone number"
+                required>
+        </div>
+
+        <button type="submit" class="btn">
+            {% if coordinator %}Update Coordinator{% else %}Save Coordinator{% endif %}
+        </button>
+
+        <a href="{{ url_for('hr_departments') }}" class="btn">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+{% endblock %}
